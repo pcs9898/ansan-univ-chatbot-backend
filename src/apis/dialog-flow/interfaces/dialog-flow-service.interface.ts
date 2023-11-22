@@ -3,12 +3,12 @@ export enum LANGUAGE_CODE_ENUM {
   us = 'en-US',
 }
 
-export interface IDetectIntentByText {
+export interface IDialogFlowServiceDetectIntentByText {
   message: string;
   languageCode: LANGUAGE_CODE_ENUM;
 }
 
-export interface IDetectIntentByEvent {
+export interface IDialogFlowServiceDetectIntentByEventName {
   postback: string;
   languageCode: LANGUAGE_CODE_ENUM;
 }

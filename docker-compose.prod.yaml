@@ -1,0 +1,19 @@
+# docker-compose.prod.yaml
+
+version: '3.7'
+
+# 컴퓨터들
+services:
+  # 컴퓨터이름
+  my-backend:
+    image: asia.gcr.io/ansan-univ-chatbot-iqau/ansan-univ-chatbot-backend:4.0
+    # platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # volumes:
+    #   - ./src:/myfolder/src
+    # env_file:
+    #   - ./.env.production
+    # ports:
+    #   - 3000:3000

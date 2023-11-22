@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { SessionsClient } from '@google-cloud/dialogflow';
 import { ConfigService } from '@nestjs/config';
 import {
-  IDetectIntentByEvent,
-  IDetectIntentByText,
+  IDialogFlowServiceDetectIntentByEventName,
+  IDialogFlowServiceDetectIntentByText,
 } from './interfaces/dialog-flow-service.interface';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class DialogFlowService {
   async detectIntentByText({
     message,
     languageCode,
-  }: IDetectIntentByText): Promise<any> {
+  }: IDialogFlowServiceDetectIntentByText): Promise<any> {
     const sessionPath = this.sessionsClient.projectAgentSessionPath(
       process.env.GOOGLE_DIALOG_FLOW_PROJECT_ID,
       'sessionId',
@@ -49,7 +49,10 @@ export class DialogFlowService {
 
     if (responses[0].queryResult.fulfillmentText === 'fail') {
       return 'fail';
+    } else if (responses[0].queryResult.fulfillmentText === 'greeting') {
+      return 'greeting';
     }
+
     const response = responses[0];
 
     let data;
@@ -100,7 +103,7 @@ export class DialogFlowService {
   async detectIntentByEvent({
     postback,
     languageCode,
-  }: IDetectIntentByEvent): Promise<any> {
+  }: IDialogFlowServiceDetectIntentByEventName): Promise<any> {
     const sessionPath = this.sessionsClient.projectAgentSessionPath(
       process.env.GOOGLE_DIALOG_FLOW_PROJECT_ID,
       'sessionId',
@@ -110,10 +113,8 @@ export class DialogFlowService {
       session: sessionPath,
       queryInput: {
         event: {
-          // name: postback,
           name: postback,
           languageCode,
-          // languageCode,
         },
       },
     };
