@@ -7,12 +7,28 @@ import {
   IDialogFlowServiceDetectIntentByEventName,
   IDialogFlowServiceDetectIntentByText,
 } from './interfaces/dialog-flow-service.interface';
+import { CrawlingService } from '../crawling/crawling.service';
+
+const needCrawlingIntent = [
+  'student-cafeteria',
+  'faculty-cafeteria',
+  'dormitory-cafeteria',
+];
+
+const needCrawlingIntentDisplayName = [
+  '학생 식당',
+  '기숙사 식당',
+  '교직원 식당',
+];
 
 @Injectable()
 export class DialogFlowService {
   private readonly sessionsClient: SessionsClient;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly crawlingService: CrawlingService,
+  ) {
     this.sessionsClient = new SessionsClient({
       projectId: process.env.GOOGLE_DIALOG_FLOW_PROJECT_ID,
       credentials: {
@@ -54,6 +70,16 @@ export class DialogFlowService {
     }
 
     const response = responses[0];
+
+    const displayName = response.queryResult.intent.displayName;
+    let mealTexts;
+
+    if (needCrawlingIntentDisplayName.includes(displayName)) {
+      mealTexts = await this.crawlingService.crawlingMeal({
+        displayName,
+        languageCode,
+      });
+    }
 
     let data;
 
@@ -97,6 +123,10 @@ export class DialogFlowService {
       }
     }
 
+    if (mealTexts) {
+      data.cardList.push(mealTexts);
+    }
+
     return data;
   }
 
@@ -108,6 +138,15 @@ export class DialogFlowService {
       process.env.GOOGLE_DIALOG_FLOW_PROJECT_ID,
       'sessionId',
     );
+
+    let mealTexts;
+
+    if (needCrawlingIntent.includes(postback)) {
+      mealTexts = await this.crawlingService.crawlingMeal({
+        intentName: postback,
+        languageCode,
+      });
+    }
 
     const request = {
       session: sessionPath,
@@ -166,6 +205,10 @@ export class DialogFlowService {
 
         data = { cardList };
       }
+    }
+
+    if (mealTexts) {
+      data.cardList.push(mealTexts);
     }
 
     return data;
