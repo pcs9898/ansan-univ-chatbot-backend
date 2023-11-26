@@ -16,7 +16,7 @@ import { RedisModule } from '@liaoliaots/nestjs-redis';
       config: {
         host: process.env.REDIS_HOST,
         port: Number(process.env.REDIS_PORT),
-        // password: process.env.REDIS_PASSWD,
+        password: process.env.REDIS_PASSWD,
       },
     }),
   ],
