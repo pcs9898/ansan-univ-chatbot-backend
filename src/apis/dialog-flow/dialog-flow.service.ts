@@ -2,12 +2,14 @@
 
 import { Injectable } from '@nestjs/common';
 import { SessionsClient } from '@google-cloud/dialogflow';
-import { ConfigService } from '@nestjs/config';
 import {
   IDialogFlowServiceDetectIntentByEventName,
   IDialogFlowServiceDetectIntentByText,
 } from './interfaces/dialog-flow-service.interface';
 import { CrawlingService } from '../crawling/crawling.service';
+import { Redis } from 'ioredis';
+import { InjectRedis } from '@liaoliaots/nestjs-redis';
+import * as moment from 'moment-timezone';
 
 const needCrawlingIntent = [
   'student-cafeteria',
@@ -26,8 +28,8 @@ export class DialogFlowService {
   private readonly sessionsClient: SessionsClient;
 
   constructor(
-    private readonly configService: ConfigService,
     private readonly crawlingService: CrawlingService,
+    @InjectRedis() private readonly redisClient: Redis,
   ) {
     this.sessionsClient = new SessionsClient({
       projectId: process.env.GOOGLE_DIALOG_FLOW_PROJECT_ID,
@@ -40,6 +42,13 @@ export class DialogFlowService {
         client_id: process.env.GOOGLE_DIALOG_FLOW_CLIENT_ID,
       },
     });
+  }
+
+  getSecondsUntilMidnight() {
+    const now = moment().tz('Asia/Seoul');
+    const midnight = now.clone().add(1, 'day').startOf('day');
+
+    return midnight.diff(now, 'seconds');
   }
 
   async detectIntentByText({
@@ -72,13 +81,22 @@ export class DialogFlowService {
     const response = responses[0];
 
     const displayName = response.queryResult.intent.displayName;
+
     let mealTexts;
 
     if (needCrawlingIntentDisplayName.includes(displayName)) {
-      mealTexts = await this.crawlingService.crawlingMeal({
-        displayName,
-        languageCode,
-      });
+      const cachedMealTexts = await this.redisClient.get(
+        displayName.concat(' ' + languageCode),
+      );
+
+      if (cachedMealTexts) {
+        mealTexts = JSON.parse(cachedMealTexts);
+      } else {
+        mealTexts = await this.crawlingService.crawlingMeal({
+          displayName,
+          languageCode,
+        });
+      }
     }
 
     let data;
@@ -124,6 +142,12 @@ export class DialogFlowService {
     }
 
     if (mealTexts) {
+      await this.redisClient.set(
+        displayName.concat(' ' + languageCode),
+        JSON.stringify(mealTexts),
+        'EX',
+        this.getSecondsUntilMidnight(),
+      );
       data.cardList.push(mealTexts);
     }
 
@@ -138,6 +162,13 @@ export class DialogFlowService {
       process.env.GOOGLE_DIALOG_FLOW_PROJECT_ID,
       'sessionId',
     );
+    const result = await this.redisClient.get(
+      postback.concat(' ' + languageCode),
+    );
+
+    if (result) {
+      return JSON.parse(result);
+    }
 
     let mealTexts;
 
@@ -209,6 +240,17 @@ export class DialogFlowService {
 
     if (mealTexts) {
       data.cardList.push(mealTexts);
+      await this.redisClient.set(
+        postback.concat(' ' + languageCode),
+        JSON.stringify(data),
+        'EX',
+        this.getSecondsUntilMidnight(),
+      );
+    } else {
+      await this.redisClient.set(
+        postback.concat(' ' + languageCode),
+        JSON.stringify(data),
+      );
     }
 
     return data;
