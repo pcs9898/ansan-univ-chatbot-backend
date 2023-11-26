@@ -6,4 +6,4 @@
 ## ToDos
 
 - [x] crawling ansan univ site meal menu
-- [ ] integrate redis
+- [x] integrate redis
