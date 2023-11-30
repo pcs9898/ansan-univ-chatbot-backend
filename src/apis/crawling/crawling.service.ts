@@ -115,16 +115,18 @@ export class CrawlingService {
     const date = currentDate.getDate();
     const month = currentDate.getMonth();
 
+    console.log(formattedDate);
+
     let mealTexts;
 
     if (languageCode === LANGUAGE_CODE_ENUM.us) {
       mealTexts = [
-        '🍴 ' + dayOfWeekEN[day] + ` (${month}.${date})` + ' menu',
+        '🍴 ' + dayOfWeekEN[day] + ` (${month + 1}.${date})` + ' menu',
         ' ',
       ];
     } else {
       mealTexts = [
-        '🍴 ' + dayOfWeekKO[day] + ` (${month}.${date})` + ' 식단',
+        '🍴 ' + dayOfWeekKO[day] + ` (${month + 1}.${date})` + ' 식단',
         ' ',
       ];
     }
@@ -145,13 +147,7 @@ export class CrawlingService {
     const crawlingPage = async () => {
       let page = 1;
       while (page < 3) {
-        let url;
-
-        if (displayName) {
-          url = `https://www.ansan.ac.kr/www/meals/${restaurantNumber}?PageNo=${page}&RowCnt=10&search1=`;
-        } else {
-          url = `https://www.ansan.ac.kr/www/meals/${restaurantNumber}?PageNo=${page}&RowCnt=10&search1=`;
-        }
+        const url = `https://www.ansan.ac.kr/www/meals/${restaurantNumber}?PageNo=${page}&RowCnt=10&search1=`;
 
         const crawlingData = await axios.get(url);
         const $ = cheerio.load(crawlingData.data);
