@@ -162,13 +162,13 @@ export class DialogFlowService {
       process.env.GOOGLE_DIALOG_FLOW_PROJECT_ID,
       'sessionId',
     );
-    // const result = await this.redisClient.get(
-    //   postback.concat(' ' + languageCode),
-    // );
+    const result = await this.redisClient.get(
+      postback.concat(' ' + languageCode),
+    );
 
-    // if (result) {
-    //   return JSON.parse(result);
-    // }
+    if (result) {
+      return JSON.parse(result);
+    }
 
     let mealTexts;
 
