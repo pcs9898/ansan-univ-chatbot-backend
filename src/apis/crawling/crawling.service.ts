@@ -108,25 +108,25 @@ export class CrawlingService {
     }
 
     const currentDate = new Date();
-    const formattedDate = `${currentDate.getFullYear()}-${
+    const formattedDate = `${currentDate.getFullYear()}-${(
       currentDate.getMonth() + 1
-    }-${currentDate.getDate()}`;
+    )
+      .toString()
+      .padStart(2, '0')}-${currentDate.getDate().toString().padStart(2, '0')}`;
     const day = currentDate.getDay();
-    const date = currentDate.getDate();
-    const month = currentDate.getMonth();
-
-    console.log(formattedDate);
+    const date = currentDate.getDate().toString().padStart(2, '0');
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
 
     let mealTexts;
 
     if (languageCode === LANGUAGE_CODE_ENUM.us) {
       mealTexts = [
-        '🍴 ' + dayOfWeekEN[day] + ` (${month + 1}.${date})` + ' menu',
+        '🍴 ' + dayOfWeekEN[day] + ` (${month}.${date})` + ' menu',
         ' ',
       ];
     } else {
       mealTexts = [
-        '🍴 ' + dayOfWeekKO[day] + ` (${month + 1}.${date})` + ' 식단',
+        '🍴 ' + dayOfWeekKO[day] + ` (${month}.${date})` + ' 식단',
         ' ',
       ];
     }
@@ -165,7 +165,7 @@ export class CrawlingService {
           }
         });
 
-        if (restaurantNumber === 0 || restaurantNumber === 1) {
+        if (restaurantNumber === 0) {
           break;
         }
 
