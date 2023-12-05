@@ -84,8 +84,10 @@ export class DialogFlowService {
 
     let mealTexts;
 
+    let cachedMealTexts;
+
     if (needCrawlingIntentDisplayName.includes(displayName)) {
-      const cachedMealTexts = await this.redisClient.get(
+      cachedMealTexts = await this.redisClient.get(
         displayName.concat(' ' + languageCode),
       );
 
@@ -142,12 +144,14 @@ export class DialogFlowService {
     }
 
     if (mealTexts) {
-      await this.redisClient.set(
-        displayName.concat(' ' + languageCode),
-        JSON.stringify(mealTexts),
-        'EX',
-        this.getSecondsUntilMidnight(),
-      );
+      if (!cachedMealTexts) {
+        await this.redisClient.set(
+          displayName.concat(' ' + languageCode),
+          JSON.stringify(mealTexts),
+          'EX',
+          this.getSecondsUntilMidnight(),
+        );
+      }
       data.cardList.push(mealTexts);
     }
 
