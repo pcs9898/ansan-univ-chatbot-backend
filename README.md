@@ -32,7 +32,7 @@
 - FE로부터 채팅 메세지 혹은 이벤트(미리 diagflow에서 지정한 postback, 일종의 지정된 메뉴)를 rest api로 받아 Dialogflow로 전달해 Diagflow에서 indent macthcing 답변을 FE로 전달
 - 제공 정보는 학사일정, 셔틀버스, 캠퍼스맵, 식단, 장학일정, 교내연락처, 도서관, 등록금 , 수강신청 등등 
 - 만약 받아온 indent가 학식이라면 안산대학교 홈페이지에서 학식 정보를 크롤링하여 FE로 전달
-- 학식 같은 경우 매일 변하기에 크롤링후 하루 단위로만 redis에 캐싱
+- 학식 같은 경우 매일 변하기에 크롤링후 번역후 하루 단위로만 redis에 캐싱
 - 다국어(영어) 지원
 
 
@@ -40,6 +40,7 @@
 
 - Nestjs  
 - Dialogflow
+- Google Cloud Translate
 - Redis
 - Cheerio
 - GCP
