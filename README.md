@@ -6,14 +6,17 @@
 - 챗봇 엔진 직접 뛰울 능력이 없어 구글 챗봇 엔진 Dialogflow를 사용하였고 배포는 GCP에 하였습니다.
 
 
-## 제작 기간 📅 && 참여 인원 🧑‍🤝‍🧑
+## 프론트엔드 프로젝트 링크
+https://github.com/pcs9898/ansan-univ-chatbot-frontend
+
+
+## 백엔드 프로젝트 제작 기간 📅 && 참여 인원 🧑‍🤝‍🧑
 
 - 2023 11월 22일 ~ 2023 12월 5일 (2주)
 - 백엔드 1명 (본인), Diaglogflow 1명 (팀원: 이형준)
 
 
-## 백엔드 프로젝트 링크
-https://github.com/pcs9898/ansan-univ-chatbot-frontend
+
 
 
 ## 작동 화면
