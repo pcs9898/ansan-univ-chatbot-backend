@@ -9,7 +9,11 @@
 ## 제작 기간 📅 && 참여 인원 🧑‍🤝‍🧑
 
 - 2023 11월 22일 ~ 2023 12월 5일 (2주)
-- 백엔드 1명 (본인), Diaglogflow 1명 (팀원: 이형준) 
+- 백엔드 1명 (본인), Diaglogflow 1명 (팀원: 이형준)
+
+
+## 백엔드 프로젝트 링크
+https://github.com/pcs9898/ansan-univ-chatbot-frontend
 
 
 ## 작동 화면
