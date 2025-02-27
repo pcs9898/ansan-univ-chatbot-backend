@@ -7,7 +7,7 @@
 
 
 ## 프론트엔드 프로젝트 링크
-https://github.com/pcs9898/ansan-univ-chatbot-frontend
+- [프론트엔드 프로젝트 링크](https://github.com/pcs9898/ansan-univ-chatbot-frontend)
 
 
 ## 백엔드 프로젝트 제작 기간 📅 && 참여 인원 🧑‍🤝‍🧑
