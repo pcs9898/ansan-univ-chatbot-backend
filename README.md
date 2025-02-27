@@ -6,8 +6,8 @@
 - 챗봇 엔진 직접 뛰울 능력이 없어 구글 챗봇 엔진 Dialogflow를 사용하였고 배포는 GCP에 하였습니다.
 
 
-## 프론트엔드 프로젝트 링크
-- [프론트엔드 프로젝트 링크](https://github.com/pcs9898/ansan-univ-chatbot-frontend)
+## 프론트엔드 프로젝트
+- [프론트엔드 프로젝트 깃헙 링크](https://github.com/pcs9898/ansan-univ-chatbot-frontend)
 
 
 ## 백엔드 프로젝트 제작 기간 📅 && 참여 인원 🧑‍🤝‍🧑
